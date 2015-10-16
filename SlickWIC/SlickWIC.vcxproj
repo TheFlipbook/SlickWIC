@@ -139,6 +139,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\x64;$(SDK_PATH)\DevIL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>DevIL.lib;ILU.lib;ILUT.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>SlickWIC.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
