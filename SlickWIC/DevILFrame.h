@@ -8,8 +8,6 @@ namespace Slick
 	// Actual Image Display Data
 	class DevILFrame : public IWICBitmapFrameDecode, public IUnknownImpl
 	{
-        friend class DevILDecoder;
-
 	public:
         static HRESULT Create ( IWICImagingFactory *pImagingFactory, ILuint type, ILubyte *data, ILuint size, DevILFrame **frame );
 
@@ -35,7 +33,6 @@ namespace Slick
 		// IWICBitmapSource [Optional]
 		virtual HRESULT STDMETHODCALLTYPE CopyPalette ( IWICPalette *pIPalette );
 
-    protected:
         //IUnknownImpl m_unknown;
         IWICBitmap *m_image;
 	};

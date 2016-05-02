@@ -11,9 +11,24 @@
 #include "SlickWICGUIDs.h"
 
 static HINSTANCE s_hInstance = NULL;
+static bool s_initialized = false;
 
 namespace Slick
 {
+    static void RequestInitIL()
+    {
+        if( !s_initialized )
+        {
+	        ilInit();
+            iluInit();
+
+            ilEnable(IL_ORIGIN_SET);
+            ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
+
+            s_initialized = true;
+        }
+    }
+
     static void RegisterThumbnail( Slick::IRegistrar &reg, wchar_t const *ext )
     {
         // Thumbnail Provider
@@ -24,25 +39,25 @@ namespace Slick
         // System Thumbnailer
         std::wstringstream sysKey;
         sysKey << "SystemFileAssociations\\." << ext << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
-        reg.SetString( thumbKey.str().c_str(), L"", CommonGUID::Str::Thumbnail );
+        reg.SetString( sysKey.str().c_str(), L"", CommonGUID::Str::Thumbnail );
         
         // Content Search
         std::wstringstream signalKey;
         signalKey << "." << ext;
-        reg.SetString( signalKey.str().c_str(), L"Content Type", L"image/x-tga" );
+        reg.SetString( signalKey.str().c_str(), L"Content Type", SlickDecoder_PSD::Format::ContentType() );
         reg.SetString( signalKey.str().c_str(), L"PerceivedType", L"image" );
 
         // Photo Gallery
         std::wstringstream extKey;
         extKey << "." << ext;
-        reg.SetString( extKey.str().c_str(), L"", L"tgafile" );
+        reg.SetString( extKey.str().c_str(), L"", SlickDecoder_PSD::Format::TypeName() );
 
         std::wstring sysPrefix( L"SystemFileAssociations\\" );
         
         
         std::wstringstream openWithKey;
         openWithKey << "." << ext << "\\OpenWithProgids";
-        reg.SetString( openWithKey.str().c_str(), L"tgafile", L"" );
+        reg.SetString( openWithKey.str().c_str(), SlickDecoder_PSD::Format::TypeName(), L"" );
 
         std::wstringstream openListKey;
         openListKey << "." << ext << "\\OpenWithList\\PhotoViewer.dll";
@@ -59,8 +74,8 @@ namespace Slick
         reg.SetString( sysContextKey.str().c_str(), L"", L"" );
 
         std::wstringstream progidKey;
-        progidKey << "tgafile";
-        reg.SetString( progidKey.str().c_str(), L"", L"TGA File" );
+        progidKey << SlickDecoder_PSD::Format::TypeName() ;
+        reg.SetString( progidKey.str().c_str(), L"", SlickDecoder_PSD::Format::FriendlyName() );
         
         std::wstringstream shellKey;
         shellKey << progidKey.str() << "\\shell";
@@ -91,22 +106,22 @@ namespace Slick
 
         // Tells WIC that this decoder exists
         std::wstringstream wicKey;
-        wicKey << pre << CommonGUID::Str::WIC << L"\\Instance\\" << WICGUID::Str::Decoder; 
+        wicKey << pre << CommonGUID::Str::WIC << L"\\Instance\\" << SlickDecoder_PSD::Format::DecoderKeyStr(); 
         reg.SetString( wicKey.str().c_str(), L"", L"" );
-        reg.SetString( wicKey.str().c_str(), L"CLSID", WICGUID::Str::Decoder );
+        reg.SetString( wicKey.str().c_str(), L"CLSID", SlickDecoder_PSD::Format::DecoderKeyStr() );
         reg.SetString( wicKey.str().c_str(), L"FriendlyName", L"SlickWIC" );
 
         // Information about decoder
         std::wstringstream decoderKey;
-        decoderKey << pre << WICGUID::Str::Decoder;
+        decoderKey << pre << SlickDecoder_PSD::Format::DecoderKeyStr();
         reg.SetString( decoderKey.str().c_str(), L"Date", _T(__DATE__) );
         reg.SetString( decoderKey.str().c_str(), L"FriendlyName", L"SlickWIC" );    // Required by Specification
         reg.SetString( decoderKey.str().c_str(), L"VendorGUID", WICGUID::Str::Vendor ); // Required by Specification
 
         // Information about the File
-        reg.SetString( decoderKey.str().c_str(), L"ContainerFormat", WICGUID::Str::File_TGA );
-        reg.SetString( decoderKey.str().c_str(), L"MimeTypes", L"image/x-tga" );    // Required by Specification
-        reg.SetString( decoderKey.str().c_str(), L"FileExtensions", L".tga" );      // Required by Specification
+        reg.SetString( decoderKey.str().c_str(), L"ContainerFormat", SlickDecoder_PSD::Format::FileKeyStr() );
+        reg.SetString( decoderKey.str().c_str(), L"MimeTypes", SlickDecoder_PSD::Format::ContentType() );    // Required by Specification
+        reg.SetString( decoderKey.str().c_str(), L"FileExtensions", SlickDecoder_PSD::Format::DotExtension() );      // Required by Specification
         
         // Formats Folder
         std::wstringstream formatKey;
@@ -123,23 +138,10 @@ namespace Slick
         patternsKey << decoderKey.str() << L"\\Patterns";
         reg.SetString( patternsKey.str().c_str(), L"", L"" );
 
-        std::wstringstream patternsItem;
-        patternsItem << patternsKey.str() << "\\0";
-        reg.SetDWord( patternsItem.str().c_str(), L"EndOfStream", 1 );
-        reg.SetDWord( patternsItem.str().c_str(), L"Position", 18 );
-
-        
-        const char * pattern = "TRUEVISION-XFILE";
-        const unsigned int length = 16;
-        BYTE mask[length];
-        std::fill_n( mask, length, 0xFF );
-
-        reg.SetDWord( patternsItem.str().c_str(), L"Length", length );
-        reg.SetBytes( patternsItem.str().c_str(), L"Pattern", pattern, length );
-        reg.SetBytes( patternsItem.str().c_str(), L"Mask", mask, length );
+        SlickDecoder_PSD::Format::RegisterPattern( reg, patternsKey.str() );
 
         // Tell Explorer to use this decoder for Thumbnails
-        RegisterThumbnail( reg, L"tga" );
+        RegisterThumbnail( reg, SlickDecoder_PSD::Format::Extension() );
         //RegisterThumbnail( reg, L"dds" );
         //RegisterThumbnail( reg, L"psd" );
 
@@ -179,12 +181,13 @@ STDAPI DllUnregisterServer()
 
 STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, void **ppvObject )
 {
-
     if( ppvObject )
     {
-        if( Slick::WICGUID::ID::Decoder == rclsid )
+        if( Slick::SlickDecoder_PSD::Format::DecoderKey() == rclsid )
         {
-            IClassFactory *classFactory = new Slick::DevILDecoderFactory();
+            Slick::RequestInitIL();
+
+            IClassFactory *classFactory = new Slick::SlickDecoder_PSD::Factory();
             if (!classFactory)
                 return E_OUTOFMEMORY;
             

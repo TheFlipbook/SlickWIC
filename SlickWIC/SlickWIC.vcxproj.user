@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommand>regsvr32</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Windows\system32\regsvr32.exe</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommandArguments>$(TargetPath)</LocalDebuggerCommandArguments>
@@ -10,8 +10,8 @@
     <RemoteDebuggerCommandArguments>$(TargetPath)</RemoteDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommand>regsvr32</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>$(TargetPath)</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommand>C:\Windows\System32\rundll32.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommandArguments>%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll ImageView_Fullscreen "C:\Dev\Projects\Emulous\Content\Textures\MoodBoard\Mood_Ground_Accent_Grass.tga"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

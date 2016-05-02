@@ -29,11 +29,33 @@ namespace Slick
     const GUID WICGUID::ID::Decoder
         = { 0x6c7fb17c, 0xa1b0, 0x4919, { 0x98, 0xd7, 0x95, 0x27, 0x1a, 0xce, 0x52, 0x60 } };
 
+    // Decoder_TGA
+    const wchar_t * WICGUID::Str::Decoder_TGA
+        = L"{8710BE66-B01A-4025-8FC2-36027496B887}";
+    const GUID WICGUID::ID::Decoder_TGA
+        = { 0x8710be66, 0xb01a, 0x4025, { 0x8f, 0xc2, 0x36, 0x2, 0x74, 0x96, 0xb8, 0x87 } };
+
     // File_TGA
     const wchar_t * WICGUID::Str::File_TGA
         = L"{C750FDD0-F191-4903-A1BE-87B80471440B}";
     const GUID WICGUID::ID::File_TGA
         = { 0xc750fdd0, 0xf191, 0x4903, { 0xa1, 0xbe, 0x87, 0xb8, 0x4, 0x71, 0x44, 0xb } };
+
+
+    // Decoder_PSD
+    const wchar_t * WICGUID::Str::Decoder_PSD
+        = L"{646F563B-4F45-4EB0-AB29-D261BAD55818}";
+    const GUID WICGUID::ID::Decoder_PSD
+        = { 0x646f563b, 0x4f45, 0x4eb0, { 0xab, 0x29, 0xd2, 0x61, 0xba, 0xd5, 0x58, 0x18 } };
+
+
+    // File_PSD
+    const wchar_t * WICGUID::Str::File_PSD
+        = L"{E0958E58-50F5-45BD-99CA-8B5DC05770D8}";
+    const GUID WICGUID::ID::File_PSD
+        = { 0xe0958e58, 0x50f5, 0x45bd, { 0x99, 0xca, 0x8b, 0x5d, 0xc0, 0x57, 0x70, 0xd8 } };
+
+
 
     // Explorer
     const wchar_t * CommonGUID::Str::Explorer

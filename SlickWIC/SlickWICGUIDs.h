@@ -13,7 +13,10 @@ namespace Slick
         public:
             static const GUID Vendor;
             static const GUID Decoder;
+            static const GUID Decoder_TGA;
             static const GUID File_TGA;
+            static const GUID Decoder_PSD;
+            static const GUID File_PSD;
         };
 
         class Str
@@ -21,7 +24,10 @@ namespace Slick
         public:
             static const wchar_t * Vendor;
             static const wchar_t * Decoder;
+            static const wchar_t * Decoder_TGA;
             static const wchar_t * File_TGA;
+            static const wchar_t * Decoder_PSD;
+            static const wchar_t * File_PSD;
         };
     };
 
