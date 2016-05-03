@@ -155,17 +155,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Build\precompiled.h" />
     <ClInclude Include="Decoder\DecoderFormats.h" />
     <ClInclude Include="Decoder\DevILDecoder.h" />
     <ClInclude Include="Decoder\DevILFrame.h" />
     <ClInclude Include="Decoder\SlickWICGUIDs.h" />
-    <ClInclude Include="precompiled.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Util\ILWICBridge.h" />
     <ClInclude Include="Util\IUnknownImpl.h" />
     <ClInclude Include="Util\Registrar.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Build\precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Decoder\DevILFrame.cpp" />
     <ClCompile Include="Decoder\SlickWICGUIDs.cpp" />
     <ClCompile Include="dllmain.cpp">
@@ -182,14 +188,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="precompiled.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Util\Registrar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\SlickWIC.def" />
+    <None Include="_License.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
