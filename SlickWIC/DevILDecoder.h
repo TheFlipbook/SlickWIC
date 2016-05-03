@@ -16,8 +16,7 @@ namespace Slick
     class DecoderFormat_TGA
     {
     public:
-        static const wchar_t* Extension() { return L"tga"; }
-        static const wchar_t* DotExtension() { return L".tga"; }
+        static const wchar_t* Extension() { return L".tga"; }
         static const wchar_t* TypeName() { return L"tgafile"; }
         static const wchar_t* FriendlyName() { return L"TGA File"; }
         static const wchar_t* ContentType() { return L"image/x-tga"; }
@@ -54,8 +53,7 @@ namespace Slick
     class DecoderFormat_PSD
     {
     public:
-        static const wchar_t* Extension() { return L"psd"; }
-        static const wchar_t* DotExtension() { return L".psd"; }
+        static const wchar_t* Extension() { return L".psd"; }
         static const wchar_t* TypeName() { return L"psdfile"; }
         static const wchar_t* FriendlyName() { return L"PSD File"; }
         static const wchar_t* ContentType() { return L"image/x-psd"; }
@@ -91,8 +89,7 @@ namespace Slick
     class DecoderFormat_DDS
     {
     public:
-        static const wchar_t* Extension() { return L"dds"; }
-        static const wchar_t* DotExtension() { return L".dds"; }
+        static const wchar_t* Extension() { return L".dds"; }
         static const wchar_t* TypeName() { return L"ddsfile"; }
         static const wchar_t* FriendlyName() { return L"Direct Draw Surface"; }
         static const wchar_t* ContentType() { return L"image/x-dds"; }
@@ -551,7 +548,7 @@ namespace Slick
         // Information about the File type
         reg.SetString( decoderKey.str().c_str(), L"ContainerFormat", Format::FileKeyStr() );
         reg.SetString( decoderKey.str().c_str(), L"MimeTypes", Format::ContentType() );         // Required by Specification
-        reg.SetString( decoderKey.str().c_str(), L"FileExtensions", Format::DotExtension() );   // Required by Specification
+        reg.SetString( decoderKey.str().c_str(), L"FileExtensions", Format::Extension() );   // Required by Specification
         
         // Formats Folder
         std::wstringstream formatKey;
@@ -575,40 +572,40 @@ namespace Slick
 
         // Thumbnail Provider
         std::wstringstream thumbKey;
-        thumbKey << Format::DotExtension() << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
+        thumbKey << Format::Extension() << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
         reg.SetString( thumbKey.str().c_str(), L"", CommonGUID::Str::Thumbnail );
 
         // System Thumbnailer
         std::wstringstream sysKey;
-        sysKey << "SystemFileAssociations\\" << Format::DotExtension() << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
+        sysKey << "SystemFileAssociations\\" << Format::Extension() << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
         reg.SetString( sysKey.str().c_str(), L"", CommonGUID::Str::Thumbnail );
         
         // Content Search
         std::wstringstream signalKey;
-        signalKey << Format::DotExtension();
+        signalKey << Format::Extension();
         reg.SetString( signalKey.str().c_str(), L"Content Type", Format::ContentType() );
         reg.SetString( signalKey.str().c_str(), L"PerceivedType", L"image" );
 
         // Photo Gallery
         std::wstringstream extKey;
-        extKey << Format::DotExtension();
+        extKey << Format::Extension();
         reg.SetString( extKey.str().c_str(), L"", Format::TypeName() );
 
         std::wstring sysPrefix( L"SystemFileAssociations\\" );
         
         std::wstringstream openWithKey;
-        openWithKey << Format::DotExtension() << "\\OpenWithProgids";
+        openWithKey << Format::Extension() << "\\OpenWithProgids";
         reg.SetString( openWithKey.str().c_str(), Format::TypeName(), L"" );
 
         std::wstringstream openListKey;
-        openListKey << Format::DotExtension() << "\\OpenWithList\\PhotoViewer.dll";
+        openListKey << Format::Extension() << "\\OpenWithList\\PhotoViewer.dll";
         reg.SetString( openListKey.str().c_str(), L"", L"" );
         std::wstringstream sysOpenListKey;
         sysOpenListKey << sysPrefix << openListKey.str();
         reg.SetString( sysOpenListKey.str().c_str(), L"", L"" );
 
         std::wstringstream contextKey;
-        contextKey << Format::DotExtension() << "\\ShellEx\\ContextMenuHandlers\\ShellImagePreview";
+        contextKey << Format::Extension() << "\\ShellEx\\ContextMenuHandlers\\ShellImagePreview";
         reg.SetString( contextKey.str().c_str(), L"", CommonGUID::Str::Gallery );
         std::wstringstream sysContextKey;
         sysContextKey << sysPrefix << contextKey.str();
