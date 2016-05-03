@@ -22,37 +22,42 @@
 // ------------------------------------------------------------------------------------------------
 
 #pragma once
-#include "stdafx.h"
+#include "precompiled.h"
 
 namespace Slick
 {
     // --------------------------------------------------------------------------------------------
-    class IRegistrar
-    {
-    public:
-        virtual void SetString( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value ) = 0;
-        virtual void SetDWord( wchar_t const *keyName, wchar_t const *valueName, DWORD value ) = 0;
-        virtual void SetBytes( wchar_t const *keyName, wchar_t const *valueName, const void *value, size_t count ) = 0;
-        virtual void SetExpand( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value ) = 0;
-    };
-
+	// Actual Image Display Data
     // --------------------------------------------------------------------------------------------
-    class Registrar : public IRegistrar
-    {
-    public:
-        virtual void SetString( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
-        virtual void SetDWord( wchar_t const *keyName, wchar_t const *valueName, DWORD value );
-        virtual void SetBytes( wchar_t const *keyName, wchar_t const *valueName, const void *value, size_t count );
-        virtual void SetExpand( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
-    };
+	class DevILFrame : public IWICBitmapFrameDecode, public IUnknownImpl
+	{
+	public:
+        static HRESULT Create ( IWICImagingFactory *pImagingFactory, ILuint type, ILubyte *data, ILuint size, DevILFrame **frame );
 
-    // --------------------------------------------------------------------------------------------
-    class Deregistrar : public IRegistrar
-    {
-    public:
-        virtual void SetString( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
-        virtual void SetDWord( wchar_t const *keyName, wchar_t const *valueName, DWORD value );
-        virtual void SetBytes( wchar_t const *keyName, wchar_t const *valueName, const void *value, size_t count );
-        virtual void SetExpand( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
-    };
-}
+        DevILFrame( IWICBitmap *image );
+        virtual ~DevILFrame();
+
+        // IUnknown
+        virtual ULONG STDMETHODCALLTYPE AddRef (){ return IUnknownImpl::AddRef(); }
+        virtual ULONG STDMETHODCALLTYPE Release(){ return IUnknownImpl::Release(); }
+        virtual HRESULT STDMETHODCALLTYPE QueryInterface ( REFIID riid, void **ppvObject );
+
+		// Required IWICBitmapFrameDecode
+		virtual HRESULT STDMETHODCALLTYPE GetThumbnail ( IWICBitmapSource **ppIThumbnail );
+		virtual HRESULT STDMETHODCALLTYPE GetColorContexts ( UINT cCount, IWICColorContext **ppIColorContexts, UINT *pcActualCount );
+		virtual HRESULT STDMETHODCALLTYPE GetMetadataQueryReader ( IWICMetadataQueryReader **ppIMetadataQueryReader);
+		
+		// IWICBitmapSource
+		virtual HRESULT STDMETHODCALLTYPE GetSize ( UINT *puiWidth, UINT *puiHeight );
+		virtual HRESULT STDMETHODCALLTYPE GetPixelFormat ( WICPixelFormatGUID *pPixelFormat );
+		virtual HRESULT STDMETHODCALLTYPE GetResolution ( double *pDpiX, double *pDpiY );
+		virtual HRESULT STDMETHODCALLTYPE CopyPixels ( const WICRect *prc, UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer );
+
+		// IWICBitmapSource [Optional]
+		virtual HRESULT STDMETHODCALLTYPE CopyPalette ( IWICPalette *pIPalette );
+
+        //IUnknownImpl m_unknown;
+        IWICBitmap *m_image;
+	};
+
+};

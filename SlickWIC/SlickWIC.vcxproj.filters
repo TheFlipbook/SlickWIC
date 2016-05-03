@@ -7,7 +7,7 @@
     <Filter Include="Decoder">
       <UniqueIdentifier>{e7beffce-1cd3-4f22-8e73-fbc96779cc82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helper">
+    <Filter Include="Util">
       <UniqueIdentifier>{8e0b471e-33ac-47cc-b1c9-034b0e01e5b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -15,50 +15,48 @@
     <ClInclude Include="targetver.h">
       <Filter>Build</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="Decoder\SlickWICGUIDs.h">
+      <Filter>Decoder</Filter>
+    </ClInclude>
+    <ClInclude Include="Decoder\DecoderFormats.h">
+      <Filter>Decoder</Filter>
+    </ClInclude>
+    <ClInclude Include="Decoder\DevILDecoder.h">
+      <Filter>Decoder</Filter>
+    </ClInclude>
+    <ClInclude Include="Decoder\DevILFrame.h">
+      <Filter>Decoder</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\IUnknownImpl.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Registrar.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\ILWICBridge.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="precompiled.h">
       <Filter>Build</Filter>
-    </ClInclude>
-    <ClInclude Include="Registrar.h">
-      <Filter>Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="ILWICBridge.h">
-      <Filter>Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="IUnknownImpl.h">
-      <Filter>Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="SlickWICGUIDs.h">
-      <Filter>Decoder</Filter>
-    </ClInclude>
-    <ClInclude Include="DevILFrame.h">
-      <Filter>Decoder</Filter>
-    </ClInclude>
-    <ClInclude Include="DevILDecoder.h">
-      <Filter>Decoder</Filter>
-    </ClInclude>
-    <ClInclude Include="DecoderFormats.h">
-      <Filter>Decoder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Decoder\DevILFrame.cpp">
+      <Filter>Decoder</Filter>
+    </ClCompile>
+    <ClCompile Include="Decoder\SlickWICGUIDs.cpp">
+      <Filter>Decoder</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Registrar.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="precompiled.cpp">
       <Filter>Build</Filter>
-    </ClCompile>
-    <ClCompile Include="Registrar.cpp">
-      <Filter>Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="DevILFrame.cpp">
-      <Filter>Decoder</Filter>
-    </ClCompile>
-    <ClCompile Include="SlickWICGUIDs.cpp">
-      <Filter>Decoder</Filter>
-    </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Decoder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SlickWIC.def">
+    <None Include="Build\SlickWIC.def">
       <Filter>Build</Filter>
     </None>
   </ItemGroup>

@@ -21,10 +21,10 @@
 // This license shall be perpetual and irrevocable.
 // ------------------------------------------------------------------------------------------------
 
-#include "stdafx.h"
+#include "precompiled.h"
 
-#include "Registrar.h"
-#include "DecoderFormats.h"
+#include "Util/Registrar.h"
+#include "Decoder/DecoderFormats.h"
 
 static HINSTANCE s_hInstance = NULL;
 static bool s_initialized = false;

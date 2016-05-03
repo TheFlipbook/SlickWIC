@@ -22,57 +22,56 @@
 // ------------------------------------------------------------------------------------------------
 
 #pragma once
-#include "stdafx.h"
+#include "precompiled.h"
 
 namespace Slick
 {
     // --------------------------------------------------------------------------------------------
-    static void GUIDToStr( GUID id, std::wstring &str );
+    HRESULT ILErrorToWICError( ILenum errorcode )
+    {
+        switch (errorcode)
+        {
+        case IL_ILLEGAL_OPERATION:
+            return WINCODEC_ERR_WRONGSTATE;
+
+        case IL_COULD_NOT_OPEN_FILE:
+            WINCODEC_ERR_ACCESSDENIED;
+
+        case IL_INVALID_ENUM:
+            WINCODEC_ERR_UNKNOWNIMAGEFORMAT;
+
+        case IL_INVALID_PARAM:
+            return E_INVALIDARG;
+
+        case IL_INVALID_FILE_HEADER:
+            return WINCODEC_ERR_BADHEADER;
+
+        case IL_ILLEGAL_FILE_VALUE:
+            return WINCODEC_ERR_BADIMAGE;
+
+        case IL_INVALID_CONVERSION:
+            return WINCODEC_ERR_UNSUPPORTEDPIXELFORMAT;
+
+        case IL_OUT_OF_MEMORY:
+            return E_OUTOFMEMORY;
+            
+        case IL_LIB_JPEG_ERROR:
+        case IL_LIB_PNG_ERROR:
+        default:
+            return E_FAIL;
+        }
+    }
 
     // --------------------------------------------------------------------------------------------
-    class WICGUID
+    HRESULT CheckILError()
     {
-    public:
-        class ID
+        ILenum errorcode = ilGetError();
+        if( IL_NO_ERROR != errorcode )
         {
-        public:
-            static const GUID Vendor;
-            static const GUID Decoder;
-            static const GUID Decoder_TGA;
-            static const GUID File_TGA;
-            static const GUID Decoder_PSD;
-            static const GUID File_PSD;
-            static const GUID Decoder_DDS;
-            static const GUID File_DDS;
-        };
+            std::clog << iluErrorString(errorcode) << std::endl;
+            return ILErrorToWICError( errorcode );
+        }
 
-        class Str
-        {
-        public:
-            static const wchar_t * Vendor;
-            static const wchar_t * Decoder;
-            static const wchar_t * Decoder_TGA;
-            static const wchar_t * File_TGA;
-            static const wchar_t * Decoder_PSD;
-            static const wchar_t * File_PSD;
-            static const wchar_t * Decoder_DDS;
-            static const wchar_t * File_DDS;
-        };
-    };
-
-    // --------------------------------------------------------------------------------------------
-    class CommonGUID
-    {
-    public:
-        class Str
-        {
-        public:
-            static const wchar_t * Explorer;
-            static const wchar_t * WIC;
-            static const wchar_t * Thumbnail;
-            static const wchar_t * Gallery;
-            static const wchar_t * WICID_32BitRGBAlpha;
-            static const wchar_t * WICID_24BitRGB;
-        };
-    };
+        return S_OK;
+    }
 }

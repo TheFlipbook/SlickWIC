@@ -22,11 +22,11 @@
 // ------------------------------------------------------------------------------------------------
 
 #pragma once
-#include "stdafx.h"
+#include "precompiled.h"
 
-#include "DevILFrame.h"
-#include "SlickWICGUIDs.h"
-#include "Registrar.h"
+#include "Util/Registrar.h"
+#include "Decoder/DevILFrame.h"
+#include "Decoder/SlickWICGUIDs.h"
 
 namespace Slick
 {

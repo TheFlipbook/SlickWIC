@@ -21,7 +21,7 @@
 // This license shall be perpetual and irrevocable.
 // ------------------------------------------------------------------------------------------------
 
-#include "stdafx.h"
+#include "precompiled.h"
 #include "SlickWICGUIDs.h"
 
 namespace Slick

@@ -21,10 +21,10 @@
 // This license shall be perpetual and irrevocable.
 // ------------------------------------------------------------------------------------------------
 
-#include "stdafx.h"
+#include "precompiled.h"
 #include "DevILFrame.h"
 
-#include "ILWICBridge.h"
+#include "Util/ILWICBridge.h"
 
 namespace Slick
 {

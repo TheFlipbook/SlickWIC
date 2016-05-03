@@ -22,56 +22,57 @@
 // ------------------------------------------------------------------------------------------------
 
 #pragma once
-#include "stdafx.h"
+#include "precompiled.h"
 
 namespace Slick
 {
     // --------------------------------------------------------------------------------------------
-    class SLICKWIC_API IUnknownImpl : public IUnknown
+    static void GUIDToStr( GUID id, std::wstring &str );
+
+    // --------------------------------------------------------------------------------------------
+    class WICGUID
     {
     public:
-        IUnknownImpl()
-            : m_refs(0)
+        class ID
         {
-        }
+        public:
+            static const GUID Vendor;
+            static const GUID Decoder;
+            static const GUID Decoder_TGA;
+            static const GUID File_TGA;
+            static const GUID Decoder_PSD;
+            static const GUID File_PSD;
+            static const GUID Decoder_DDS;
+            static const GUID File_DDS;
+        };
 
-        virtual ~IUnknownImpl(){}
-
-        virtual ULONG STDMETHODCALLTYPE AddRef()
+        class Str
         {
-            return InterlockedIncrement(&m_refs);
-        }
+        public:
+            static const wchar_t * Vendor;
+            static const wchar_t * Decoder;
+            static const wchar_t * Decoder_TGA;
+            static const wchar_t * File_TGA;
+            static const wchar_t * Decoder_PSD;
+            static const wchar_t * File_PSD;
+            static const wchar_t * Decoder_DDS;
+            static const wchar_t * File_DDS;
+        };
+    };
 
-        virtual ULONG STDMETHODCALLTYPE Release()
+    // --------------------------------------------------------------------------------------------
+    class CommonGUID
+    {
+    public:
+        class Str
         {
-            ULONG result = InterlockedDecrement(&m_refs);
-            if( 0 == result )
-            {
-                // FIXME
-                delete this;
-            }
-            
-            return result;
-        }
-
-        virtual HRESULT STDMETHODCALLTYPE QueryInterface ( REFIID riid, void **ppvObject )
-        {
-            if( ppvObject )
-            {
-                if( riid == IID_IUnknown )
-                {
-                    *ppvObject = this;
-                    AddRef();
-                    return S_OK;
-                }
-
-                return E_NOINTERFACE;
-            }
-
-            return E_POINTER;
-        }
-
-    protected:
-        ULONG m_refs;
+        public:
+            static const wchar_t * Explorer;
+            static const wchar_t * WIC;
+            static const wchar_t * Thumbnail;
+            static const wchar_t * Gallery;
+            static const wchar_t * WICID_32BitRGBAlpha;
+            static const wchar_t * WICID_24BitRGB;
+        };
     };
 }

@@ -22,56 +22,37 @@
 // ------------------------------------------------------------------------------------------------
 
 #pragma once
-#include "stdafx.h"
+#include "precompiled.h"
 
 namespace Slick
 {
     // --------------------------------------------------------------------------------------------
-    HRESULT ILErrorToWICError( ILenum errorcode )
+    class IRegistrar
     {
-        switch (errorcode)
-        {
-        case IL_ILLEGAL_OPERATION:
-            return WINCODEC_ERR_WRONGSTATE;
-
-        case IL_COULD_NOT_OPEN_FILE:
-            WINCODEC_ERR_ACCESSDENIED;
-
-        case IL_INVALID_ENUM:
-            WINCODEC_ERR_UNKNOWNIMAGEFORMAT;
-
-        case IL_INVALID_PARAM:
-            return E_INVALIDARG;
-
-        case IL_INVALID_FILE_HEADER:
-            return WINCODEC_ERR_BADHEADER;
-
-        case IL_ILLEGAL_FILE_VALUE:
-            return WINCODEC_ERR_BADIMAGE;
-
-        case IL_INVALID_CONVERSION:
-            return WINCODEC_ERR_UNSUPPORTEDPIXELFORMAT;
-
-        case IL_OUT_OF_MEMORY:
-            return E_OUTOFMEMORY;
-            
-        case IL_LIB_JPEG_ERROR:
-        case IL_LIB_PNG_ERROR:
-        default:
-            return E_FAIL;
-        }
-    }
+    public:
+        virtual void SetString( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value ) = 0;
+        virtual void SetDWord( wchar_t const *keyName, wchar_t const *valueName, DWORD value ) = 0;
+        virtual void SetBytes( wchar_t const *keyName, wchar_t const *valueName, const void *value, size_t count ) = 0;
+        virtual void SetExpand( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value ) = 0;
+    };
 
     // --------------------------------------------------------------------------------------------
-    HRESULT CheckILError()
+    class Registrar : public IRegistrar
     {
-        ILenum errorcode = ilGetError();
-        if( IL_NO_ERROR != errorcode )
-        {
-            std::clog << iluErrorString(errorcode) << std::endl;
-            return ILErrorToWICError( errorcode );
-        }
+    public:
+        virtual void SetString( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
+        virtual void SetDWord( wchar_t const *keyName, wchar_t const *valueName, DWORD value );
+        virtual void SetBytes( wchar_t const *keyName, wchar_t const *valueName, const void *value, size_t count );
+        virtual void SetExpand( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
+    };
 
-        return S_OK;
-    }
+    // --------------------------------------------------------------------------------------------
+    class Deregistrar : public IRegistrar
+    {
+    public:
+        virtual void SetString( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
+        virtual void SetDWord( wchar_t const *keyName, wchar_t const *valueName, DWORD value );
+        virtual void SetBytes( wchar_t const *keyName, wchar_t const *valueName, const void *value, size_t count );
+        virtual void SetExpand( wchar_t const *keyName, wchar_t const *valueName, LPCWSTR value );
+    };
 }
