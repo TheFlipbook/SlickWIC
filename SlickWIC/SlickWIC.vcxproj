@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DecoderFormats.h" />
     <ClInclude Include="DevILDecoder.h" />
     <ClInclude Include="DevILFrame.h" />
     <ClInclude Include="ILWICBridge.h" />

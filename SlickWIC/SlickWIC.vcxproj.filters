@@ -37,6 +37,9 @@
     <ClInclude Include="SlickWICGUIDs.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="DecoderFormats.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

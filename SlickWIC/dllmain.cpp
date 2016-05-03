@@ -23,10 +23,8 @@
 
 #include "stdafx.h"
 
-#include "DevILDecoder.h"
-
 #include "Registrar.h"
-#include "SlickWICGUIDs.h"
+#include "DecoderFormats.h"
 
 static HINSTANCE s_hInstance = NULL;
 static bool s_initialized = false;
