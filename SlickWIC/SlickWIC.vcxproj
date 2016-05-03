@@ -144,9 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DevILDecoder.h" />
-    <ClInclude Include="DevILDecoderFactory.h" />
     <ClInclude Include="DevILFrame.h" />
-    <ClInclude Include="IFormat.h" />
     <ClInclude Include="ILWICBridge.h" />
     <ClInclude Include="IUnknownImpl.h" />
     <ClInclude Include="Registrar.h" />
@@ -155,8 +153,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DevILDecoder.cpp" />
-    <ClCompile Include="DevILDecoderFactory.cpp" />
     <ClCompile Include="DevILFrame.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>

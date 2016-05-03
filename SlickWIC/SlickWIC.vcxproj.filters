@@ -31,16 +31,10 @@
     <ClInclude Include="ILWICBridge.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="DevILDecoderFactory.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Registrar.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="SlickWICGUIDs.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="IFormat.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,16 +42,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Build</Filter>
     </ClCompile>
-    <ClCompile Include="DevILDecoder.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="DevILFrame.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DevILDecoderFactory.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Registrar.cpp">
