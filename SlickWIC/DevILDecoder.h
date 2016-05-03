@@ -87,6 +87,42 @@ namespace Slick
         }
     };
 
+    // --------------------------------------------------------------------------------------------
+    class DecoderFormat_DDS
+    {
+    public:
+        static const wchar_t* Extension() { return L"dds"; }
+        static const wchar_t* DotExtension() { return L".dds"; }
+        static const wchar_t* TypeName() { return L"ddsfile"; }
+        static const wchar_t* FriendlyName() { return L"Direct Draw Surface"; }
+        static const wchar_t* ContentType() { return L"image/x-dds"; }
+        
+        
+        static const GUID DecoderKey() { return WICGUID::ID::Decoder_DDS; }
+        static const wchar_t* DecoderKeyStr() { return WICGUID::Str::Decoder_DDS; }
+
+        static const GUID FileKey() { return WICGUID::ID::File_DDS; }
+        static const wchar_t* FileKeyStr() { return WICGUID::Str::File_DDS; }
+
+        static const ILuint ILType() { return IL_DDS; }
+
+        static void RegisterPattern( Slick::IRegistrar &reg, const std::wstring &patternsKey )
+        {
+            std::wstringstream patternsItem;
+            patternsItem << patternsKey << "\\0";
+            reg.SetDWord( patternsItem.str().c_str(), L"Position", 0 );
+
+        
+            const char * pattern = "DDS";
+            const unsigned int length = 3;
+            BYTE mask[length];
+            std::fill_n( mask, length, 0xFF );
+
+            reg.SetDWord( patternsItem.str().c_str(), L"Length", length );
+            reg.SetBytes( patternsItem.str().c_str(), L"Pattern", pattern, length );
+            reg.SetBytes( patternsItem.str().c_str(), L"Mask", mask, length );
+        }
+    };
 
     // --------------------------------------------------------------------------------------------
     template< class T >
@@ -185,6 +221,9 @@ namespace Slick
 		virtual HRESULT STDMETHODCALLTYPE GetColorContexts ( UINT cCount, IWICColorContext **ppIColorContexts, UINT *pcActualCount );
 		virtual HRESULT STDMETHODCALLTYPE GetMetadataQueryReader ( IWICMetadataQueryReader **ppIMetadataQueryReader);
 		virtual HRESULT STDMETHODCALLTYPE CopyPalette ( IWICPalette *pIPalette );
+
+        // Codec Registration
+        static void STDMETHODCALLTYPE Register( Slick::IRegistrar &reg );
 
 	private:
 		IWICImagingFactory *m_pImagingFactory;
@@ -486,7 +525,135 @@ namespace Slick
         return E_INVALIDARG;
 	}
 
+    // --------------------------------------------------------------------------------------------
+    template< class T >
+    void SlickDecoder<T>::Register( Slick::IRegistrar &reg )
+	{
+        std::wstring pre( L"CLSID\\" );
+        
+        // Filettype subsection
+        // --------------------
+
+        // Tells WIC that this decoder exists
+        std::wstringstream wicKey;
+        wicKey << pre << CommonGUID::Str::WIC << L"\\Instance\\" << Format::DecoderKeyStr(); 
+        reg.SetString( wicKey.str().c_str(), L"", L"" );
+        reg.SetString( wicKey.str().c_str(), L"CLSID", Format::DecoderKeyStr() );
+        reg.SetString( wicKey.str().c_str(), L"FriendlyName", L"SlickWIC" );
+
+        // Information about decoder
+        std::wstringstream decoderKey;
+        decoderKey << pre << Format::DecoderKeyStr();
+        reg.SetString( decoderKey.str().c_str(), L"Date", _T(__DATE__) );
+        reg.SetString( decoderKey.str().c_str(), L"FriendlyName", L"SlickWIC" );                // Required by Specification
+        reg.SetString( decoderKey.str().c_str(), L"VendorGUID", WICGUID::Str::Vendor );         // Required by Specification
+
+        // Information about the File type
+        reg.SetString( decoderKey.str().c_str(), L"ContainerFormat", Format::FileKeyStr() );
+        reg.SetString( decoderKey.str().c_str(), L"MimeTypes", Format::ContentType() );         // Required by Specification
+        reg.SetString( decoderKey.str().c_str(), L"FileExtensions", Format::DotExtension() );   // Required by Specification
+        
+        // Formats Folder
+        std::wstringstream formatKey;
+        formatKey << decoderKey.str() << L"\\Formats";
+        reg.SetString( formatKey.str().c_str(), L"", L"" );
+
+        // Individual pixel formats supported.
+        std::wstringstream formatItem;
+        formatItem << formatKey.str() << "\\" << CommonGUID::Str::WICID_32BitRGBAlpha;
+        reg.SetString( formatItem.str().c_str(), L"Formats", CommonGUID::Str::WICID_24BitRGB ); // Required by Specification
+
+        // Pattern Match to get WIC to send a file this way
+        std::wstringstream patternsKey;
+        patternsKey << decoderKey.str() << L"\\Patterns";
+        reg.SetString( patternsKey.str().c_str(), L"", L"" );
+        Format::RegisterPattern( reg, patternsKey.str() );
+
+
+        // Explorer Subsection
+        // -------------------
+
+        // Thumbnail Provider
+        std::wstringstream thumbKey;
+        thumbKey << Format::DotExtension() << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
+        reg.SetString( thumbKey.str().c_str(), L"", CommonGUID::Str::Thumbnail );
+
+        // System Thumbnailer
+        std::wstringstream sysKey;
+        sysKey << "SystemFileAssociations\\" << Format::DotExtension() << L"\\ShellEx\\" << CommonGUID::Str::Explorer;
+        reg.SetString( sysKey.str().c_str(), L"", CommonGUID::Str::Thumbnail );
+        
+        // Content Search
+        std::wstringstream signalKey;
+        signalKey << Format::DotExtension();
+        reg.SetString( signalKey.str().c_str(), L"Content Type", Format::ContentType() );
+        reg.SetString( signalKey.str().c_str(), L"PerceivedType", L"image" );
+
+        // Photo Gallery
+        std::wstringstream extKey;
+        extKey << Format::DotExtension();
+        reg.SetString( extKey.str().c_str(), L"", Format::TypeName() );
+
+        std::wstring sysPrefix( L"SystemFileAssociations\\" );
+        
+        std::wstringstream openWithKey;
+        openWithKey << Format::DotExtension() << "\\OpenWithProgids";
+        reg.SetString( openWithKey.str().c_str(), Format::TypeName(), L"" );
+
+        std::wstringstream openListKey;
+        openListKey << Format::DotExtension() << "\\OpenWithList\\PhotoViewer.dll";
+        reg.SetString( openListKey.str().c_str(), L"", L"" );
+        std::wstringstream sysOpenListKey;
+        sysOpenListKey << sysPrefix << openListKey.str();
+        reg.SetString( sysOpenListKey.str().c_str(), L"", L"" );
+
+        std::wstringstream contextKey;
+        contextKey << Format::DotExtension() << "\\ShellEx\\ContextMenuHandlers\\ShellImagePreview";
+        reg.SetString( contextKey.str().c_str(), L"", CommonGUID::Str::Gallery );
+        std::wstringstream sysContextKey;
+        sysContextKey << sysPrefix << contextKey.str();
+        reg.SetString( sysContextKey.str().c_str(), L"", L"" );
+
+        std::wstringstream progidKey;
+        progidKey << Format::TypeName() ;
+        reg.SetString( progidKey.str().c_str(), L"", Format::FriendlyName() );
+        
+        std::wstringstream shellKey;
+        shellKey << progidKey.str() << "\\shell";
+
+        std::wstringstream openKey;
+        openKey << shellKey.str() << "\\open";
+        reg.SetExpand( openKey.str().c_str(), L"MuiVerb", L"@%ProgramFiles%\\Windows Photo Viewer\\photoviewer.dll,-3043" );
+        
+        std::wstringstream commandKey;
+        commandKey << openKey.str() << "\\command";
+        reg.SetExpand( commandKey.str().c_str(), L"", L"%SystemRoot%\\System32\\rundll32.exe \"%ProgramFiles%\\Windows Photo Viewer\\PhotoViewer.dll\", ImageView_Fullscreen %1" );
+        
+        std::wstringstream dropKey;
+        dropKey << openKey.str() << "\\DropTarget";
+        reg.SetString( dropKey.str().c_str(), L"Clsid", CommonGUID::Str::Gallery );
+        
+        std::wstringstream printKey;
+        printKey << shellKey.str() << "\\printto\\command";
+        reg.SetExpand( printKey.str().c_str(), L"", L"\"%SystemRoot%\\System32\\rundll32.exe\" \"%SystemRoot%\\System32\\shimgvw.dll\",ImageView_PrintTo /pt \"%1\" \"%2\" \"%3\" \"%4\"");
+
+
+        // Codec DLL Binding
+        // -----------------
+        HMODULE curModule = GetModuleHandle( L"SlickWIC.dll" );
+        wchar_t tempFileName[MAX_PATH];
+        if( s_hInstance != NULL )
+        {
+            GetModuleFileName( s_hInstance, tempFileName, MAX_PATH );
+            std::wstringstream inprocKey;
+            inprocKey << decoderKey.str() << "\\InprocServer32";
+            reg.SetString( inprocKey.str().c_str(), L"", tempFileName );
+            reg.SetString( inprocKey.str().c_str(), L"ThreadingModel", L"Apartment" );
+        }
+	}
+
 
     typedef SlickDecoder<DecoderFormat_TGA> SlickDecoder_TGA;
     typedef SlickDecoder<DecoderFormat_PSD> SlickDecoder_PSD;
+    typedef SlickDecoder<DecoderFormat_DDS> SlickDecoder_DDS;
 };

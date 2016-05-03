@@ -17,6 +17,8 @@ namespace Slick
             static const GUID File_TGA;
             static const GUID Decoder_PSD;
             static const GUID File_PSD;
+            static const GUID Decoder_DDS;
+            static const GUID File_DDS;
         };
 
         class Str
@@ -28,6 +30,8 @@ namespace Slick
             static const wchar_t * File_TGA;
             static const wchar_t * Decoder_PSD;
             static const wchar_t * File_PSD;
+            static const wchar_t * Decoder_DDS;
+            static const wchar_t * File_DDS;
         };
     };
 
