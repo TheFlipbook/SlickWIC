@@ -22,12 +22,17 @@
 // ------------------------------------------------------------------------------------------------
 
 #include "precompiled.h"
+
+#include <mutex>
+
 #include "DevILFrame.h"
 
 #include "Util/ILWICBridge.h"
 
 namespace Slick
 {
+    std::mutex s_mutex_devil;
+
     // --------------------------------------------------------------------------------------------
     DevILFrame::DevILFrame( IWICBitmap *image )
         : m_image(image)
@@ -144,6 +149,8 @@ namespace Slick
     {
         HRESULT result = S_OK;
         ILboolean success = true;
+
+        std::lock_guard<std::mutex> guard( s_mutex_devil );
 
         // ALLOCATE imageID;
         ILuint imageID;
