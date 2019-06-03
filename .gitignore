@@ -1,5 +1,7 @@
 _Bin
 _Obj
+.vs
+3rdParty/
 ipch
 x64
 SlickWIC.suo
